@@ -6,7 +6,7 @@
 #include "hal_can.hpp"
 #include "message_abstraction.hpp"
 
-enum struct acquisition_card_status_struct : uint8_t
+enum struct Acquisition_card_status_struct : uint8_t
 {
   ALL_OK,
   COS_SIE_rozwalilo,
@@ -14,16 +14,16 @@ enum struct acquisition_card_status_struct : uint8_t
   Bateria_laduje
 };
 
-struct __attribute__((packed)) acquisition_card_data
+struct __attribute__((packed)) Acquisition_card_data
 {
   uint32_t wheel_time_interval_left;
   uint32_t wheel_time_interval_right;
-  acquisition_card_status_struct ac_status =
-      acquisition_card_status_struct::ALL_OK;
+  Acquisition_card_status_struct ac_status =
+      Acquisition_card_status_struct::ALL_OK;
 };
 
 const int AC_CAN_ID = 0x02;
-const int AC_CAN_DLC = sizeof(acquisition_card_data);
+const int AC_CAN_DLC = sizeof(Acquisition_card_data);
 
 const CAN_TxHeaderTypeDef CAN_TX_HEADER_AC{
     AC_CAN_ID, 0xFFF, CAN_ID_STD, CAN_RTR_DATA, AC_CAN_DLC, DISABLE};

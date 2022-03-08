@@ -10,24 +10,26 @@
 namespace new_can
 {
 
-  class can_interface
-  {
+  typedef void (*ErrorHandlerFunction)(void);
 
-    device<apps_data> apps{APPS_CAN_ID};
-    device<acquisition_card_data> ac{AC_CAN_ID};
+  class Can_interface
+  {
+    ErrorHandlerFunction error_func;
+
+    bool unhandled_error;
+
+    Device<Apps_data> apps{APPS_CAN_ID};
+    Device<Acquisition_card_data> ac{AC_CAN_ID};
     
-    std::array<device_base *, 2> device_array = {&apps, &ac /*all devices */};
+    Device<Apps_error> apps_error{APPS_CAN_ERROR_ID};
+
+    std::array<Device_base *, 2> device_array = {&apps, &ac /*all devices */};
+    std::array<Device_base *, 2> errors_array = {&apps_error};
 
   public:
-    void disp()
-    {
-      printf("Apps IDE: %d \n", (int)apps.IDE);
-      printf("Apps status: %d \n", (int)apps.data.apps_status);
-      printf("Apps value: %d \n", apps.data.apps_value);
-      printf("Apps d_dt: %d \n\n", apps.data.d_apps_dt);
-    }
-
-    void get_message(can_rx_message &m)
+    Can_interface(ErrorHandlerFunction func = nullptr): error_func(func), unhandled_error(false) { }
+    
+    void get_message(Can_rx_message &m)
     {
       for (auto &dev : device_array)
       {
@@ -37,11 +39,28 @@ namespace new_can
           return; // to exit void
         }
       }
+
+      for (auto &dev: errors_array) {
+        if (dev->IDE == m.header.IDE) {
+          dev->set_data(m);
+          if (error_func not_eq nullptr)
+            error_func();
+          
+          unhandled_error = true;
+          return;
+        }
+      }
     }
 
-    apps_data get_apps_data() const { return apps.data; }
+    void set_error_function(ErrorHandlerFunction error_handler) { error_func = error_handler; }
+    void clear_error_function() { error_func = nullptr; }
 
-    acquisition_card_data get_acquisition_card_data() const { return ac.data; }
+    bool is_unhandled() const { return unhandled_error; }
+    void set_unhandled(bool error_state) { unhandled_error = error_state; }
+
+    const Apps_data & get_apps_data() const { return apps.data; }
+    const struct Apps_error & get_apps_error() const { return apps_error.data; }
+
+    const Acquisition_card_data & get_acquisition_card_data() const { return ac.data; }
   };
-
 } // namespace new_can

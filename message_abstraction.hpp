@@ -7,9 +7,9 @@
 
 static const std::size_t max_dlc_size = 8;
 
-struct can_rx_message
+struct Can_rx_message
 {
-  can_rx_message(CAN_HandleTypeDef &hcan, uint32_t RxFifo)
+  Can_rx_message(CAN_HandleTypeDef &hcan, uint32_t RxFifo)
       : header{0}, data{0}
   {
     this->status =
@@ -22,9 +22,9 @@ struct can_rx_message
 };
 
 template <typename T>
-struct can_tx_message
+struct Can_tx_message
 {
-  can_tx_message(const T &data, const CAN_TxHeaderTypeDef &message_header)
+  Can_tx_message(const T &data, const CAN_TxHeaderTypeDef &message_header)
       : header{message_header}
   {
     static_assert(std::is_trivially_constructible<T>(),
@@ -41,31 +41,31 @@ struct can_tx_message
   }
 };
 
-class device_base
+class Device_base
 {
 public:
   const uint32_t IDE;
   const uint32_t DLC;
-  constexpr device_base(uint32_t ide, uint32_t dlc) : IDE{ide}, DLC{dlc} {}
-  virtual void set_data(const can_rx_message &m) = 0;
+  constexpr Device_base(uint32_t ide, uint32_t dlc) : IDE{ide}, DLC{dlc} {}
+  virtual void set_data(const Can_rx_message &m) = 0;
 };
 
 template <typename T>
-class device : public device_base
+class Device : public Device_base
 {
 public:
-  explicit constexpr device(uint32_t ide)
-      : device_base(ide, sizeof(T)), data{0} {};
+  explicit constexpr Device(uint32_t ide)
+      : Device_base(ide, sizeof(T)), data{0} {};
 
   T data;
 
-  void set_data(const can_rx_message &m) override
+  void set_data(const Can_rx_message &m) override
   {
     std::memcpy(&data, m.data, sizeof(T));
   }
 };
 
-void print_can_message(const can_rx_message &m)
+void print_can_message(const Can_rx_message &m)
 {
   printf("IDE: %d \n", (int)m.header.IDE);
   printf("DLC: %d \n", (int)m.header.DLC);

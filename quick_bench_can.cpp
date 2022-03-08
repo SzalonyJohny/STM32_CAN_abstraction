@@ -123,8 +123,8 @@ HAL_StatusTypeDef HAL_CAN_AddTxMessage(CAN_HandleTypeDef *hcan,
 
 static const std::size_t max_dlc_size = 8;
 
-struct can_rx_message {
-  can_rx_message(CAN_HandleTypeDef *hcan, uint32_t RxFifo)
+struct Can_rx_message {
+  Can_rx_message(CAN_HandleTypeDef *hcan, uint32_t RxFifo)
       : header{0}, data{0} {
     this->status =
         HAL_CAN_GetRxMessage(hcan, RxFifo, &this->header, this->data);
@@ -135,8 +135,8 @@ struct can_rx_message {
   HAL_StatusTypeDef status;
 };
 
-template <typename T> struct can_tx_message {
-  can_tx_message(T data, CAN_TxHeaderTypeDef message_header)
+template <typename T> struct Can_tx_message {
+  Can_tx_message(T data, CAN_TxHeaderTypeDef message_header)
       : header{message_header} {
     static_assert(std::is_trivially_constructible<T>(),
                   "Object must by C like struct");
@@ -151,12 +151,12 @@ template <typename T> struct can_tx_message {
   }
 };
 
-class device_base {
+class Device_base {
 public:
   const uint32_t IDE;
   const uint32_t DLC;
-  constexpr device_base(uint32_t ide, uint32_t dlc) : IDE{ide}, DLC{dlc} {}
-  virtual void set_data(can_rx_message &m) = 0;
+  constexpr Device_base(uint32_t ide, uint32_t dlc) : IDE{ide}, DLC{dlc} {}
+  virtual void set_data(Can_rx_message &m) = 0;
 };
 
 enum struct apps_status_struct : uint8_t {
@@ -165,54 +165,54 @@ enum struct apps_status_struct : uint8_t {
   SUPPLY_VOLTAGE_INCORECT,
 };
 
-struct __attribute__((packed)) apps_data {
+struct __attribute__((packed)) Apps_data {
   uint16_t apps_value;
   int16_t d_apps_dt;
   apps_status_struct apps_status;
 };
 
-class apps_c : public device_base {
+class apps_c : public Device_base {
 public:
   constexpr apps_c(uint32_t ide, uint32_t dlc)
-      : device_base(ide, dlc), data{0} {};
+      : Device_base(ide, dlc), data{0} {};
 
-  apps_data data;
+  Apps_data data;
 
-  void set_data(can_rx_message &m) override {
-    std::memcpy(&data, &m.data[0], sizeof(apps_data));
+  void set_data(Can_rx_message &m) override {
+    std::memcpy(&data, &m.data[0], sizeof(Apps_data));
   }
 };
 
 namespace apps_const {
 const int APPS_CAN_ID = 0x0A;
-const int APPS_CAN_DLC = sizeof(apps_data);
+const int APPS_CAN_DLC = sizeof(Apps_data);
 const CAN_TxHeaderTypeDef can_tx_header_apps{
     APPS_CAN_ID, 0xFFF, CAN_ID_STD, CAN_RTR_DATA, APPS_CAN_DLC, DISABLE};
 }
 
 
-enum struct acquisition_card_status_struct : uint8_t {
+enum struct Acquisition_card_status_struct : uint8_t {
   ALL_OK,
   COS_SIE_rozwalilo,
   SUPPLY_VOLTAGE_INCORECT,
 };
 
-struct __attribute__((packed)) acquisition_card_data {
+struct __attribute__((packed)) Acquisition_card_data {
   uint32_t wheel_time_interval_left;
   uint32_t wheel_time_interval_right;
-  acquisition_card_status_struct apps_status =
-      acquisition_card_status_struct::ALL_OK;
+  Acquisition_card_status_struct apps_status =
+      Acquisition_card_status_struct::ALL_OK;
 };
 
-class acquisition_card_c : public device_base {
+class acquisition_card_c : public Device_base {
 public:
   constexpr acquisition_card_c(uint32_t ide, uint32_t dlc)
-      : device_base(ide, dlc), data{0} {};
+      : Device_base(ide, dlc), data{0} {};
 
-  acquisition_card_data data;
+  Acquisition_card_data data;
 
-  void set_data(can_rx_message &m) override {
-    std::memcpy(&data, &m.data[0], sizeof(acquisition_card_data));
+  void set_data(Can_rx_message &m) override {
+    std::memcpy(&data, &m.data[0], sizeof(Acquisition_card_data));
   }
 };
 
@@ -230,7 +230,7 @@ class can_interface {
   acquisition_card_c ac3{6, 4};
 
 
-  std::array<device_base *, 8> device_array = {&apps, &ac, &apps2, &ac2, &apps3, &ac3};
+  std::array<Device_base *, 8> device_array = {&apps, &ac, &apps2, &ac2, &apps3, &ac3};
 
 public:
   void disp() {
@@ -240,7 +240,7 @@ public:
     printf("Apps d_dt: %d \n\n", apps.data.d_apps_dt);
   }
 
-  void get_message(can_rx_message &m) {
+  void get_message(Can_rx_message &m) {
     for (auto &dev : device_array) {
       if (dev->IDE == m.header.IDE) {
         dev->set_data(m);
@@ -249,7 +249,7 @@ public:
     }
   }
 
-  void get_message_2(can_rx_message &m) {
+  void get_message_2(Can_rx_message &m) {
       if(apps.IDE == m.header.IDE){
         apps.set_data(m);
         return;
@@ -279,9 +279,9 @@ public:
 
   }
 
-  apps_data get_apps_data() { return apps.data; }
+  Apps_data get_apps_data() { return apps.data; }
 
-  acquisition_card_data get_acquisition_card_data() { return ac.data; }
+  Acquisition_card_data get_acquisition_card_data() { return ac.data; }
 };
 
 } // namespace new_can

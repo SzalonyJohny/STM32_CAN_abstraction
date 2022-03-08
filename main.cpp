@@ -9,13 +9,13 @@ using namespace new_can;
 CAN_HandleTypeDef hcan1;
 
 // global can interface handle
-can_interface can;
+Can_interface can;
 // 
 uint32_t TxMailbox = 3;
 
 void interrupt_handler()
 {
-  can_rx_message rx{hcan1, 1};
+  Can_rx_message rx{hcan1, 1};
 
   if (rx.status == HAL_StatusTypeDef::HAL_OK)
   {
@@ -29,23 +29,20 @@ void interrupt_handler()
 
 void recive_example()
 {
-  can.disp();
   interrupt_handler();
 
   [[maybe_unused]]auto apps = can.get_apps_data();
   [[maybe_unused]]auto d = can.get_acquisition_card_data().wheel_time_interval_left;
-  
-  can.disp();
 }
 
 void send_example()
 {
-  apps_data apps_test;
+  Apps_data apps_test;
   apps_test.apps_value = 1300;
   apps_test.d_apps_dt = 3;
   apps_test.apps_status = apps_status_struct::ALL_OK;
   // example sending senario`
-  auto tx = can_tx_message(apps_test, can_tx_header_apps);
+  auto tx = Can_tx_message(apps_test, can_tx_header_apps);
   auto res = tx.send(hcan1, &TxMailbox);
   if (res != HAL_StatusTypeDef::HAL_OK)
   {
@@ -55,13 +52,13 @@ void send_example()
 
 void test_case_can_tx_message()
 {
-  apps_data apps_test;
+  Apps_data apps_test;
   apps_test.apps_status = apps_status_struct::ALL_OK;
   apps_test.apps_value = 1300;
   apps_test.d_apps_dt = 3;
 
   // example sending senario
-  auto tx = can_tx_message(apps_test, can_tx_header_apps);
+  auto tx = Can_tx_message(apps_test, can_tx_header_apps);
   auto res = tx.send(hcan1, &TxMailbox);
   if (res != HAL_StatusTypeDef::HAL_OK)
   {
@@ -69,25 +66,17 @@ void test_case_can_tx_message()
   };
 
   // copy tx to rx (CAN simulation)
-  can_rx_message rx{hcan1, 1};
-  std::copy(tx.buff, tx.buff + sizeof(apps_data), rx.data);
-
-  can.disp();
+  Can_rx_message rx{hcan1, 1};
+  std::copy(tx.buff, tx.buff + sizeof(Apps_data), rx.data);
 
   // print rx buffor
   printf("\nbuffor: ");
-  for (std::size_t i = 0; i < sizeof(apps_data); ++i)
+  for (std::size_t i = 0; i < sizeof(Apps_data); ++i)
   {
     printf(" %d", (int)rx.data[i]);
   }
-  printf("\n\n");
-
   // CAN recive data
   can.get_message(rx);
-
-  can.disp();
-
-  printf("\n");
 }
 
 int main()
