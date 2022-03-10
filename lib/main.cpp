@@ -40,7 +40,7 @@ void send_example()
   Apps_data apps_test;
   apps_test.apps_value = 1300;
   apps_test.d_apps_dt = 3;
-  apps_test.apps_status = apps_status_struct::ALL_OK;
+  apps_test.apps_status = Apps_status_struct::ALL_OK;
   // example sending senario`
   auto tx = Can_tx_message(apps_test, can_tx_header_apps);
   auto res = tx.send(hcan1, &TxMailbox);
@@ -53,7 +53,7 @@ void send_example()
 void test_case_can_tx_message()
 {
   Apps_data apps_test;
-  apps_test.apps_status = apps_status_struct::ALL_OK;
+  apps_test.apps_status = Apps_status_struct::ALL_OK;
   apps_test.apps_value = 1300;
   apps_test.d_apps_dt = 3;
 
