@@ -1,4 +1,14 @@
 #include "outputdocument.h"
+#include <iostream>
+
+OutputDocument::OutputDocument(const std::string &genFileName)
+{
+    fileName = genFileName;
+    fileName.erase(fileName.find('.'));
+    fileName.erase(0, fileName.find('/') + 1);
+
+    file.open("files/" + fileName + ".hpp");
+}
 
 bool OutputDocument::write()
 {
@@ -39,10 +49,16 @@ void OutputDocument::newCanFrame(const std::string &newFrameName)
 void OutputDocument::addElementToCanFrame(const std::string &dataType, const std::string &dataName,
                                           const std::string &comment)
 {
-    auto & lastFrame = canFrames.back();
+    auto &lastFrame = canFrames.at(canFrames.size() - 1);
     lastFrame.dataTypes.emplace_back(dataType);
     lastFrame.dataNames.emplace_back(dataName);
     lastFrame.comments.emplace_back(comment);
+}
+
+void OutputDocument::addID(int newId)
+{
+    canFrames.at(canFrames.size() - 1);
+    ids.emplace_back(newId);
 }
 
 void OutputDocument::writeDeviceStates()
@@ -53,7 +69,7 @@ void OutputDocument::writeDeviceStates()
         file << item << std::endl;
     }
 
-    file << '{' << std::endl;
+    file << '}' << std::endl;
 }
 
 void OutputDocument::writeCanFrames(const CanFrame &frame)
