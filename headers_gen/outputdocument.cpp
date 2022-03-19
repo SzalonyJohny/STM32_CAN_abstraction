@@ -16,8 +16,9 @@ bool OutputDocument::write()
         return false;
 
     writeHeaderGuards();
+    file << std::endl;
     writeDeviceStates();
-
+    file << std::endl;
     for (auto const & frame: canFrames)
         writeCanFrames(frame);
 
@@ -38,10 +39,15 @@ void OutputDocument::addDeviceState(const std::string &newDeviceState)
     deviceStates.emplace_back(newDeviceState);
 }
 
+void OutputDocument::addDeviceStateComment(const std::string &devStateComment)
+{
+    deviceStateComments.emplace_back(devStateComment);
+}
+
 void OutputDocument::newCanFrame(const std::string &newFrameName)
 {
     CanFrame newFrame;
-    newFrame.frameName = newFrameName;
+    newFrame.frameName = deviceName + '_' + newFrameName;
 
     canFrames.emplace_back(newFrame);
 }
@@ -63,13 +69,18 @@ void OutputDocument::addID(int newId)
 
 void OutputDocument::writeDeviceStates()
 {
-    file << "enum struct Device_states: uint8_t {" << std::endl;
+    file << "enum struct " + deviceName + "_states: uint8_t {" << std::endl;
 
-    for (auto const &item: deviceStates) {
-        file << item << std::endl;
+    for (std::size_t iter = 0; iter < deviceStates.size(); iter++) {
+        file << '\t' << removeIllegalChars(deviceStates.at(iter)) << ',';
+
+        if (deviceStateComments.at(iter) not_eq "\r")
+            file << "\t// " << deviceStateComments.at(iter);
+
+        file << std::endl;
     }
 
-    file << '}' << std::endl;
+    file << "};" << std::endl;
 }
 
 void OutputDocument::writeCanFrames(const CanFrame &frame)
@@ -79,13 +90,22 @@ void OutputDocument::writeCanFrames(const CanFrame &frame)
     file << "struct __attribute__ ((packed)) " << frame.frameName << '{' << std::endl;
 
     for (std::size_t iter = 0; iter < frame.dataNames.size(); iter++) {
-        file << frame.dataTypes.at(iter) << ' ' << frame.dataNames.at(iter) << "; ";
-        if (frame.comments.at(iter) not_eq "")
+
+        if (frame.dataTypes.at(iter) == "state") {
+            file << '\t' << deviceName + "_states";
+        }
+        else {
+            file << '\t' << frame.dataTypes.at(iter);
+        }
+        file << ' ' << removeIllegalChars(frame.dataNames.at(iter)) << "; ";
+
+        if (frame.comments.at(iter) not_eq "\r")
             file << "// " << frame.comments.at(iter);
         file << std::endl;
     }
 
     file << "};" << std::endl;
+    file << std::endl;
 }
 
 void OutputDocument::writeHeaderGuards()
@@ -93,7 +113,7 @@ void OutputDocument::writeHeaderGuards()
     std::time_t startTime = std::chrono::system_clock::to_time_t(
                 std::chrono::system_clock::now());
 
-    auto uppercaseName = makeUppercase(fileName);
+    auto uppercaseName = makeUppercase(deviceName);
 
     file << "//Generated on " << std::ctime(&startTime);
     file << "#ifndef " << uppercaseName << std::endl;
@@ -118,11 +138,21 @@ void OutputDocument::writeIDs()
         auto frameName = canFrames.at(iter).frameName;
         auto upperCaseName = makeUppercase(frameName);
         file << std::hex;
-        file << "const uint16_t " << upperCaseName << "_CAN_ID " << ids.at(iter) << std::endl;
+        file << "const uint16_t " << upperCaseName << "_CAN_ID = " << ids.at(iter) << ";" << std::endl;
         file << std::dec;
         file << "const uint8_t " << upperCaseName << "_CAN_DLC = sizeof(" << frameName << ");" << std::endl;
     }
     file << std::endl;
+}
+
+std::string OutputDocument::removeIllegalChars(std::string const &target)
+{
+    std::string strcopy = target;
+    for (auto & ch: strcopy) {
+        if (ch == ' ' or ch == '-')
+            ch = '_';
+    }
+    return strcopy;
 }
 
 std::string OutputDocument::makeUppercase(std::string target)

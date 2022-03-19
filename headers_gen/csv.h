@@ -63,21 +63,42 @@ bool parseCsv(std::string fileName)
         if (splitLine.size() == 0)
             continue;
 
-        if (splitLine.at(0) == "Device states:") {
+        if (splitLine.at(0) == "Device:") {
+            getline(file, line);
+            splitLine = splitCsvLine(line);
+            doc->setDeviceName(splitLine.at(0));
+        }
+
+        else if (splitLine.at(0) == "Device states:") {
             getline(file, line);
             splitLine = splitCsvLine(line);
             while (splitLine.at(0) not_eq "" and splitLine.at(0) not_eq "\r") {
                 doc->addDeviceState(splitLine.at(0));
+                doc->addDeviceStateComment(splitLine.at(1));
                 getline(file, line);
                 splitLine = splitCsvLine(line);
             }
         }
+
         else if (splitLine.at(0).find("frame") not_eq std::string::npos) {
             doc->newCanFrame(splitLine.at(1));
             //get frame id
             std::string str = splitLine.at(3);
-            str = str.substr(str.find("0"));
-            doc->addID(stoi(str));
+
+            if (str.find("0") not_eq std::string::npos) {   //if id number is present
+                str = str.substr(str.find("0"));
+                int id;
+                try {
+                    id = stoi(str);
+                }
+                  catch (std::invalid_argument) {
+                    id = 0;
+                }
+                doc->addID(id);
+            }
+            else {
+                doc->addID(0);
+            }
 
             getline(file, line);
             getline(file, line);
