@@ -1,4 +1,4 @@
-//Generated on Mon Mar 21 18:53:53 2022
+//Generated on Mon Mar 28 16:20:16 2022
 #ifndef APPS
 #define APPS
 
@@ -8,9 +8,13 @@
 
 
 enum struct Apps_states: uint8_t {
-	Power_up,
-	Normal_operation,
-	Sensor_Implausiblity,
+	Power_up,	// 0
+	Normal_operation,	// 1
+	Sensor_Implausiblity,	// 2
+	Left_sensor_out_of_range___lower_bound,	// 3
+	Left_sensor_out_of_range___upper_bound,	// 4
+	Right_sensor_out_of_range___lower_bound,	// 5
+	Right_sensor_out_of_range___upper_bound,	// 6
 };
 
 struct __attribute__ ((packed)) Apps_main{

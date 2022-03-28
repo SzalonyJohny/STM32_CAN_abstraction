@@ -1,7 +1,8 @@
 #include "outputdocument.h"
 #include <iostream>
 
-OutputDocument::OutputDocument(const std::string &genFileName)
+OutputDocument::OutputDocument(const std::string &genFileName, bool performCheck):
+    performIllegalCharsCheck(performCheck)
 {
     fileName = genFileName;
     fileName.erase(fileName.find('.'));
@@ -17,6 +18,9 @@ bool OutputDocument::write()
 
     writeHeaderGuards();
     file << std::endl;
+
+    writeVerbatim();
+
     writeDeviceStates();
     file << std::endl;
     for (auto const & frame: canFrames)
@@ -59,6 +63,11 @@ void OutputDocument::addElementToCanFrame(const std::string &dataType, const std
     lastFrame.dataTypes.emplace_back(dataType);
     lastFrame.dataNames.emplace_back(dataName);
     lastFrame.comments.emplace_back(comment);
+}
+
+void OutputDocument::addVerbatim(const std::string &text)
+{
+    verbatim.emplace_back(text);
 }
 
 void OutputDocument::addID(int newId)
@@ -145,12 +154,24 @@ void OutputDocument::writeIDs()
     file << std::endl;
 }
 
+void OutputDocument::writeVerbatim()
+{
+    if (verbatim.size() == 0)
+        return;
+    for (auto const & line: verbatim)
+        file << line;
+    file << std::endl;
+    file << std::endl;
+}
+
 std::string OutputDocument::removeIllegalChars(std::string const &target)
 {
     std::string strcopy = target;
-    for (auto & ch: strcopy) {
-        if (ch == ' ' or ch == '-')
-            ch = '_';
+    if (performIllegalCharsCheck) {
+        for (auto & ch: strcopy) {
+            if (ch == ' ' or ch == '-')
+                ch = '_';
+        }
     }
     return strcopy;
 }

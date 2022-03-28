@@ -55,7 +55,13 @@ bool parseCsv(std::string fileName)
     std::vector<std::string> splitLine;
     std::string line;
 
-    OutputDocument * doc = new OutputDocument(fileName);
+    std::cout << "Perform additional name check? [Y/n]";
+    bool check{false};
+
+    if (std::cin.get() not_eq 'n')
+        check = true;
+
+    OutputDocument * doc = new OutputDocument(fileName, check);
 
     while (not(file.eof())) {
         getline(file, line);
@@ -80,6 +86,16 @@ bool parseCsv(std::string fileName)
             }
         }
 
+        else if (splitLine.at(0) == "Verbatim:") {
+            getline(file, line);
+            splitLine = splitCsvLine(line);
+            while (splitLine.at(0) not_eq "" and splitLine.at(0) not_eq "\r") {
+                doc->addVerbatim(splitLine.at(0));
+                getline(file, line);
+                splitLine = splitCsvLine(line);
+            }
+        }
+
         else if (splitLine.at(0).find("frame") not_eq std::string::npos) {
             doc->newCanFrame(splitLine.at(1));
             //get frame id
@@ -91,7 +107,7 @@ bool parseCsv(std::string fileName)
                 try {
                     id = stoi(str);
                 }
-                  catch (std::invalid_argument) {
+                  catch (std::invalid_argument const &) {
                     id = 0;
                 }
                 doc->addID(id);

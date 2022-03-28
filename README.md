@@ -7,9 +7,10 @@ Header files:
 - [X] Lap Timer
 - [X] Apps
 - [X] TC
-- [ ] SF
-- [ ] AQ Card
+- [X] SF
+- [X] AQ Card
 - [X] BMS LV
 - [ ] BMS HV
-- [ ] Telemetry
-- [ ] Steering wheel
+- [X] Telemetry
+- [X] Steering wheel
+
