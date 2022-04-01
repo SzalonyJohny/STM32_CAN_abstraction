@@ -17,9 +17,10 @@ bool OutputDocument::write()
         return false;
 
     writeHeaderGuards();
-    file << std::endl;
 
     writeVerbatim();
+
+    writeEnums();
 
     writeDeviceStates();
     file << std::endl;
@@ -72,8 +73,29 @@ void OutputDocument::addVerbatim(const std::string &text)
 
 void OutputDocument::addID(int newId)
 {
-    canFrames.at(canFrames.size() - 1);
-    ids.emplace_back(newId);
+    canFrames.at(canFrames.size() - 1).id = newId;
+}
+
+void OutputDocument::setFrequency(int freq)
+{
+    canFrames.at(canFrames.size() - 1).frequency = freq;
+}
+
+void OutputDocument::addNewEnum(const std::string &name)
+{
+    CustomEnum newEnum;
+    newEnum.name = name;
+    customEnumVec.emplace_back(newEnum);
+}
+
+void OutputDocument::addEnumElement(const std::string &name, std::string const &comment)
+{
+    if (customEnumVec.empty())
+        throw std::out_of_range("Custom Enum vector is empty");
+
+    auto &lastEnum = customEnumVec.back();
+    lastEnum.states.emplace_back(name);
+    lastEnum.comments.emplace_back(comment);
 }
 
 void OutputDocument::writeDeviceStates()
@@ -139,18 +161,17 @@ void OutputDocument::writeHeaderGuards()
 
 void OutputDocument::writeIDs()
 {
-    assert(canFrames.size() == ids.size());
-
     file << std::endl;
-
-    for (std::size_t iter = 0; iter < ids.size(); iter++) {
-        auto frameName = canFrames.at(iter).frameName;
+    for (auto const &frame: canFrames) {
+        auto frameName = frame.frameName;
         auto upperCaseName = makeUppercase(frameName);
         file << std::hex;
-        file << "const uint16_t " << upperCaseName << "_CAN_ID = " << ids.at(iter) << ";" << std::endl;
+        file << "const uint16_t " << upperCaseName << "_CAN_ID = " << frame.id << ";" << std::endl;
         file << std::dec;
         file << "const uint8_t " << upperCaseName << "_CAN_DLC = sizeof(" << frameName << ");" << std::endl;
+        file << "const uint8_t " << upperCaseName << "_FREQUENCY = " << frame.frequency << ";" << std::endl;
     }
+
     file << std::endl;
 }
 
@@ -161,6 +182,29 @@ void OutputDocument::writeVerbatim()
     for (auto const & line: verbatim)
         file << line;
     file << std::endl;
+    file << std::endl;
+}
+
+void OutputDocument::writeEnums()
+{
+    if (customEnumVec.empty())
+        return;
+
+    file << std::endl;
+
+    for (auto const &item: customEnumVec) {
+        file << "enum struct " + item.name + ": uint8_t {" << std::endl;
+        for (std::size_t iter = 0; iter < item.states.size(); iter++) {
+            file << '\t' << item.states.at(iter) << ',';
+            if (item.comments.at(iter) not_eq "\r") {
+                file << "\t//" << item.comments.at(iter);
+            }
+            file << std::endl;
+        }
+        file << "};" << std::endl;
+        file << std::endl;
+    }
+
     file << std::endl;
 }
 

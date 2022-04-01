@@ -11,6 +11,14 @@ struct CanFrame {
     std::vector<std::string> dataTypes;
     std::vector<std::string> dataNames;
     std::vector<std::string> comments;
+    int frequency;
+    int id;
+};
+
+struct CustomEnum {
+    std::string name;
+    std::vector<std::string> states;
+    std::vector<std::string> comments;
 };
 
 class OutputDocument
@@ -26,13 +34,19 @@ public:
                               std::string const &comment = "");
     void addVerbatim(std::string const &text);
     void addID(int newId);
+    void setFrequency(int freq);
     void setDeviceName(std::string const &devName) { deviceName = removeIllegalChars(devName); }
+
+    void addNewEnum(std::string const &name);
+    void addEnumElement(std::string const &name, std::string const &comment = "");
+
 private:
     void writeDeviceStates();
     void writeCanFrames(CanFrame const &frame);
     void writeHeaderGuards();
     void writeIDs();
     void writeVerbatim();
+    void writeEnums();
 
     std::string removeIllegalChars(std::string const &target);
     bool performIllegalCharsCheck;
@@ -44,8 +58,8 @@ private:
     std::vector<std::string> deviceStates;
     std::vector<std::string> deviceStateComments;
     std::vector<std::string> verbatim;
+    std::vector<CustomEnum> customEnumVec;
     std::vector<CanFrame> canFrames;
-    std::vector<int> ids;
 
     std::ofstream file;
 public:

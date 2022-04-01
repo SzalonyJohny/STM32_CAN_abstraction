@@ -5,6 +5,7 @@
 #include <string>
 #include <filesystem>
 #include <fstream>
+#include <regex>
 #include "outputdocument.h"
 
 namespace csv {
@@ -95,9 +96,35 @@ bool parseCsv(std::string fileName)
                 splitLine = splitCsvLine(line);
             }
         }
+        else if (splitLine.at(0) == "Enum" or splitLine.at(0) == "enum") {
+
+            doc->addNewEnum(splitLine.at(1));
+
+            getline(file, line);
+            splitLine = splitCsvLine(line);
+
+            while (splitLine.at(0) not_eq "" and splitLine.at(0) not_eq "\r") {
+                doc->addEnumElement(splitLine.at(0), splitLine.at(1));
+                getline(file, line);
+                splitLine = splitCsvLine(line);
+            }
+        }
+
 
         else if (splitLine.at(0).find("frame") not_eq std::string::npos) {
             doc->newCanFrame(splitLine.at(1));
+            //get frame frequency
+            if (splitLine.at(0).find("Asynchronous") not_eq std::string::npos)
+                doc->setFrequency(0);
+            else {
+                std::string freq = splitLine.at(2);
+                std::regex rgx("\\d+");
+                std::smatch match;
+
+                if (std::regex_search(freq, match, rgx))
+                    doc->setFrequency(stoi(match[0]));
+            }
+
             //get frame id
             std::string str = splitLine.at(3);
 

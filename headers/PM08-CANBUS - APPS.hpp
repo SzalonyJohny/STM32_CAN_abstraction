@@ -1,4 +1,4 @@
-//Generated on Mon Mar 28 16:20:16 2022
+//Generated on Sat Apr  2 17:35:25 2022
 #ifndef APPS
 #define APPS
 
@@ -6,15 +6,14 @@
 #include "hal_can.hpp"
 #include "message_abstraction.hpp"
 
-
 enum struct Apps_states: uint8_t {
-	Power_up,	// 0
-	Normal_operation,	// 1
-	Sensor_Implausiblity,	// 2
-	Left_sensor_out_of_range___lower_bound,	// 3
-	Left_sensor_out_of_range___upper_bound,	// 4
-	Right_sensor_out_of_range___lower_bound,	// 5
-	Right_sensor_out_of_range___upper_bound,	// 6
+	Normal_operation,
+	Power_up,
+	Sensor_Implausiblity,
+	Left_sensor_out_of_range___lower_bound,
+	Left_sensor_out_of_range___upper_bound,
+	Right_sensor_out_of_range___lower_bound,
+	Right_sensor_out_of_range___upper_bound,
 };
 
 struct __attribute__ ((packed)) Apps_main{
@@ -26,6 +25,7 @@ struct __attribute__ ((packed)) Apps_main{
 
 const uint16_t APPS_MAIN_CAN_ID = 0;
 const uint8_t APPS_MAIN_CAN_DLC = sizeof(Apps_main);
+const uint8_t APPS_MAIN_FREQUENCY = 100;
 
 const CAN_TxHeaderTypeDef can_tx_header_apps{
  APPS_CAN_ID, 0xFFF, CAN_ID_STD, CAN_RTR_DATA, APPS_CAN_DLC, DISABLE};

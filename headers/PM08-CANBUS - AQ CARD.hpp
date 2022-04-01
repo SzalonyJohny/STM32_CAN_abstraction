@@ -1,4 +1,3 @@
-//Generated on Mon Mar 28 16:20:12 2022
 #ifndef AQ
 #define AQ
 
@@ -25,11 +24,12 @@ struct __attribute__ ((packed)) AQ_“Name”{
 
 const uint16_t AQ_MAIN_CAN_ID = 0;
 const uint8_t AQ_MAIN_CAN_DLC = sizeof(AQ_main);
+const uint8_t AQ_MAIN_FREQUENCY = 100;
 const uint16_t AQ_“NAME”_CAN_ID = 0;
 const uint8_t AQ_“NAME”_CAN_DLC = sizeof(AQ_“Name”);
+const uint8_t AQ_"NAME"_FREQUENCY = 0;
 
 const CAN_TxHeaderTypeDef can_tx_header_apps{
  APPS_CAN_ID, 0xFFF, CAN_ID_STD, CAN_RTR_DATA, APPS_CAN_DLC, DISABLE};
 
 #endif
-

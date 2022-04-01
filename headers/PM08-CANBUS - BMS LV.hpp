@@ -1,11 +1,10 @@
-//Generated on Mon Mar 21 18:53:53 2022
+//Generated on Sat Apr  2 17:35:22 2022
 #ifndef BMS_LV
 #define BMS_LV
 
 #include <cstdint>
 #include "hal_can.hpp"
 #include "message_abstraction.hpp"
-
 
 enum struct BMS_LV_states: uint8_t {
 	Normal,
@@ -26,7 +25,7 @@ struct __attribute__ ((packed)) BMS_LV_main{
 	BMS_LV_states device_state; 
 };
 
-struct __attribute__ ((packed)) BMS_LV_update_sth{
+struct __attribute__ ((packed)) BMS_LV_temperature{
 	int8_t temp_1; // in Celsius
 	int8_t temp_2; // in Celsius
 	int8_t temp_3; // in Celsius
@@ -40,8 +39,10 @@ struct __attribute__ ((packed)) BMS_LV_update_sth{
 
 const uint16_t BMS_LV_MAIN_CAN_ID = 0;
 const uint8_t BMS_LV_MAIN_CAN_DLC = sizeof(BMS_LV_main);
-const uint16_t BMS_LV_UPDATE_STH_CAN_ID = 0;
-const uint8_t BMS_LV_UPDATE_STH_CAN_DLC = sizeof(BMS_LV_update_sth);
+const uint8_t BMS_LV_MAIN_FREQUENCY = 100;
+const uint16_t BMS_LV_TEMPERATURE_CAN_ID = 0;
+const uint8_t BMS_LV_TEMPERATURE_CAN_DLC = sizeof(BMS_LV_temperature);
+const uint8_t BMS_LV_TEMPERATURE_FREQUENCY = 1;
 
 const CAN_TxHeaderTypeDef can_tx_header_apps{
  APPS_CAN_ID, 0xFFF, CAN_ID_STD, CAN_RTR_DATA, APPS_CAN_DLC, DISABLE};
