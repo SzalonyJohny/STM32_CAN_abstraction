@@ -1,4 +1,4 @@
-//Generated on Sat Apr  2 17:35:24 2022
+//Generated on Thu Apr  7 17:02:54 2022
 #ifndef DASH
 #define DASH
 
@@ -31,8 +31,11 @@ const uint16_t DASH_STATECHANGE_CAN_ID = 0;
 const uint8_t DASH_STATECHANGE_CAN_DLC = sizeof(Dash_StateChange);
 const uint8_t DASH_STATECHANGE_FREQUENCY = 0;
 
-const CAN_TxHeaderTypeDef can_tx_header_apps{
- APPS_CAN_ID, 0xFFF, CAN_ID_STD, CAN_RTR_DATA, APPS_CAN_DLC, DISABLE};
+const CAN_TxHeaderTypeDef can_tx_header_Dash{
+DASH_MAIN_CAN_ID, 0xFFF, CAN_ID_STD, CAN_RTR_DATA, DASH_MAIN_CAN_DLC, DISABLE};
+
+const CAN_TxHeaderTypeDef can_tx_header_Dash{
+DASH_STATECHANGE_CAN_ID, 0xFFF, CAN_ID_STD, CAN_RTR_DATA, DASH_STATECHANGE_CAN_DLC, DISABLE};
 
 #endif
 

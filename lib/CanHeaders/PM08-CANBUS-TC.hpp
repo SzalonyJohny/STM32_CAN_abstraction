@@ -1,4 +1,4 @@
-//Generated on Sat Apr  2 17:35:24 2022
+//Generated on Thu Apr  7 17:02:53 2022
 #ifndef TS
 #define TS
 
@@ -8,7 +8,7 @@
 
 enum struct TS_states: uint8_t {
 	NORMAL_OPERATION,
-	Power-up,
+	Power_up,
 	APPS_TIMEOUT,
 	APPS_INVALID_VALUE,
 	APPS_SKIP_FRAME,
@@ -28,14 +28,14 @@ struct __attribute__ ((packed)) TS_main{
 	bool  regen_enable : 1; // There is posible to produce negative torque
 	bool regen_active : 1; 
 	uint8_t traction_control_intensivity; // how much TC is limiting torque [%]
-	TS_states device state; // -------------------------
+	TS_states device_state; // -------------------------
 };
 
 struct __attribute__ ((packed)) TS_rear_suspension{
 	uint16_t adc_susp_right; 
 	uint16_t adc_susp_left; 
-	int16_t acc lateral; 
-	int16_t acc longitunal; // 
+	int16_t acc_lateral; 
+	int16_t acc_longitunal; // 
 };
 
 
@@ -46,8 +46,11 @@ const uint16_t TS_REAR_SUSPENSION_CAN_ID = 0;
 const uint8_t TS_REAR_SUSPENSION_CAN_DLC = sizeof(TS_rear_suspension);
 const uint8_t TS_REAR_SUSPENSION_FREQUENCY = 50;
 
-const CAN_TxHeaderTypeDef can_tx_header_apps{
- APPS_CAN_ID, 0xFFF, CAN_ID_STD, CAN_RTR_DATA, APPS_CAN_DLC, DISABLE};
+const CAN_TxHeaderTypeDef can_tx_header_TS{
+TS_MAIN_CAN_ID, 0xFFF, CAN_ID_STD, CAN_RTR_DATA, TS_MAIN_CAN_DLC, DISABLE};
+
+const CAN_TxHeaderTypeDef can_tx_header_TS{
+TS_REAR_SUSPENSION_CAN_ID, 0xFFF, CAN_ID_STD, CAN_RTR_DATA, TS_REAR_SUSPENSION_CAN_DLC, DISABLE};
 
 #endif
 

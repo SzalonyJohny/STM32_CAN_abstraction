@@ -29,10 +29,7 @@ bool OutputDocument::write()
 
     writeIDs();
 
-    file << "const CAN_TxHeaderTypeDef can_tx_header_apps{" << std::endl
-         << " APPS_CAN_ID, 0xFFF, CAN_ID_STD, CAN_RTR_DATA, APPS_CAN_DLC, DISABLE};" << std::endl;
-
-    file << std::endl;
+    writeHalDefinitons();
 
     file << "#endif" << std::endl << std::endl;
 
@@ -206,6 +203,17 @@ void OutputDocument::writeEnums()
     }
 
     file << std::endl;
+}
+
+void OutputDocument::writeHalDefinitons()
+{
+    for (auto const& frame: canFrames) {
+        std::string upperCaseName = makeUppercase(frame.frameName);
+        file << "const CAN_TxHeaderTypeDef can_tx_header_" + deviceName + "{" << std::endl
+             << upperCaseName + "_CAN_ID, 0xFFF, CAN_ID_STD, CAN_RTR_DATA, " + upperCaseName + "_CAN_DLC, DISABLE};" << std::endl;
+
+        file << std::endl;
+    }
 }
 
 std::string OutputDocument::removeIllegalChars(std::string const &target)

@@ -47,6 +47,7 @@ private:
     void writeIDs();
     void writeVerbatim();
     void writeEnums();
+    void writeHalDefinitons();
 
     std::string removeIllegalChars(std::string const &target);
     bool performIllegalCharsCheck;

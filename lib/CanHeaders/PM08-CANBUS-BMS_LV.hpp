@@ -1,4 +1,4 @@
-//Generated on Sat Apr  2 17:35:22 2022
+//Generated on Thu Apr  7 17:02:53 2022
 #ifndef BMS_LV
 #define BMS_LV
 
@@ -44,8 +44,11 @@ const uint16_t BMS_LV_TEMPERATURE_CAN_ID = 0;
 const uint8_t BMS_LV_TEMPERATURE_CAN_DLC = sizeof(BMS_LV_temperature);
 const uint8_t BMS_LV_TEMPERATURE_FREQUENCY = 1;
 
-const CAN_TxHeaderTypeDef can_tx_header_apps{
- APPS_CAN_ID, 0xFFF, CAN_ID_STD, CAN_RTR_DATA, APPS_CAN_DLC, DISABLE};
+const CAN_TxHeaderTypeDef can_tx_header_BMS_LV{
+BMS_LV_MAIN_CAN_ID, 0xFFF, CAN_ID_STD, CAN_RTR_DATA, BMS_LV_MAIN_CAN_DLC, DISABLE};
+
+const CAN_TxHeaderTypeDef can_tx_header_BMS_LV{
+BMS_LV_TEMPERATURE_CAN_ID, 0xFFF, CAN_ID_STD, CAN_RTR_DATA, BMS_LV_TEMPERATURE_CAN_DLC, DISABLE};
 
 #endif
 

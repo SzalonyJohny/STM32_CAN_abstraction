@@ -10,7 +10,7 @@ Header files:
 - [X] SF
 - [X] AQ Card
 - [X] BMS LV
-- [ ] BMS HV
+- [X] BMS HV
 - [X] Telemetry
 - [X] Steering wheel
 

@@ -1,4 +1,4 @@
-//Generated on Sat Apr  2 17:35:25 2022
+//Generated on Thu Apr  7 17:02:54 2022
 #ifndef APPS
 #define APPS
 
@@ -23,12 +23,13 @@ struct __attribute__ ((packed)) Apps_main{
 	Apps_states device_state; // -----------------------------------------------------------------
 };
 
+
 const uint16_t APPS_MAIN_CAN_ID = 0;
 const uint8_t APPS_MAIN_CAN_DLC = sizeof(Apps_main);
 const uint8_t APPS_MAIN_FREQUENCY = 100;
 
-const CAN_TxHeaderTypeDef can_tx_header_apps{
- APPS_CAN_ID, 0xFFF, CAN_ID_STD, CAN_RTR_DATA, APPS_CAN_DLC, DISABLE};
+const CAN_TxHeaderTypeDef can_tx_header_Apps{
+APPS_MAIN_CAN_ID, 0xFFF, CAN_ID_STD, CAN_RTR_DATA, APPS_MAIN_CAN_DLC, DISABLE};
 
 #endif
 

@@ -1,4 +1,4 @@
-//Generated on Sat Apr  2 17:35:20 2022
+//Generated on Thu Apr  7 17:02:54 2022
 #ifndef LAP_TIMER
 #define LAP_TIMER
 
@@ -27,8 +27,11 @@ const uint16_t LAP_TIMER_STATECHANGE_CAN_ID = 0;
 const uint8_t LAP_TIMER_STATECHANGE_CAN_DLC = sizeof(Lap_timer_StateChange);
 const uint8_t LAP_TIMER_STATECHANGE_FREQUENCY = 0;
 
-const CAN_TxHeaderTypeDef can_tx_header_apps{
- APPS_CAN_ID, 0xFFF, CAN_ID_STD, CAN_RTR_DATA, APPS_CAN_DLC, DISABLE};
+const CAN_TxHeaderTypeDef can_tx_header_Lap_timer{
+LAP_TIMER_MAIN_CAN_ID, 0xFFF, CAN_ID_STD, CAN_RTR_DATA, LAP_TIMER_MAIN_CAN_DLC, DISABLE};
+
+const CAN_TxHeaderTypeDef can_tx_header_Lap_timer{
+LAP_TIMER_STATECHANGE_CAN_ID, 0xFFF, CAN_ID_STD, CAN_RTR_DATA, LAP_TIMER_STATECHANGE_CAN_DLC, DISABLE};
 
 #endif
 
