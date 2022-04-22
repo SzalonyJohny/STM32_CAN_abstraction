@@ -1,4 +1,4 @@
-//Generated on Thu Apr  7 17:02:52 2022
+//Generated on Fri Apr 22 12:03:26 2022
 #ifndef STEERING_WHEEL
 #define STEERING_WHEEL
 
@@ -8,6 +8,7 @@
 
 
 enum struct buttonStates: uint8_t {
+	not_pressed,
 	button1,	//button1
 	button2,	//button2
 	button3,	//button3
@@ -53,10 +54,10 @@ const uint16_t STEERING_WHEEL_EVENT_CAN_ID = 0;
 const uint8_t STEERING_WHEEL_EVENT_CAN_DLC = sizeof(Steering_Wheel_event);
 const uint8_t STEERING_WHEEL_EVENT_FREQUENCY = 0;
 
-const CAN_TxHeaderTypeDef can_tx_header_Steering_Wheel{
+const CAN_TxHeaderTypeDef can_tx_header_STEERING_WHEEL_MAIN{
 STEERING_WHEEL_MAIN_CAN_ID, 0xFFF, CAN_ID_STD, CAN_RTR_DATA, STEERING_WHEEL_MAIN_CAN_DLC, DISABLE};
 
-const CAN_TxHeaderTypeDef can_tx_header_Steering_Wheel{
+const CAN_TxHeaderTypeDef can_tx_header_STEERING_WHEEL_EVENT{
 STEERING_WHEEL_EVENT_CAN_ID, 0xFFF, CAN_ID_STD, CAN_RTR_DATA, STEERING_WHEEL_EVENT_CAN_DLC, DISABLE};
 
 #endif

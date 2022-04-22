@@ -1,4 +1,4 @@
-//Generated on Thu Apr  7 17:02:53 2022
+//Generated on Fri Apr 22 12:03:18 2022
 #ifndef AQ
 #define AQ
 
@@ -29,15 +29,13 @@ const uint8_t AQ_MAIN_CAN_DLC = sizeof(AQ_main);
 const uint8_t AQ_MAIN_FREQUENCY = 100;
 const uint16_t AQ_AIR_FLOW_CAN_ID = 0;
 const uint8_t AQ_AIR_FLOW_CAN_DLC = sizeof(AQ_air_flow);
-const uint8_t AQ_AIR_FLOW_REQUENCY = 695844480;
+const uint8_t AQ_AIR_FLOW_FREQUENCY = 576578256;
 
-
-const CAN_TxHeaderTypeDef can_tx_header_AQ{
+const CAN_TxHeaderTypeDef can_tx_header_AQ_MAIN{
 AQ_MAIN_CAN_ID, 0xFFF, CAN_ID_STD, CAN_RTR_DATA, AQ_MAIN_CAN_DLC, DISABLE};
 
-const CAN_TxHeaderTypeDef can_tx_header_AQ{
+const CAN_TxHeaderTypeDef can_tx_header_AQ_AIR_FLOW{
 AQ_AIR_FLOW_CAN_ID, 0xFFF, CAN_ID_STD, CAN_RTR_DATA, AQ_AIR_FLOW_CAN_DLC, DISABLE};
-
 
 #endif
 

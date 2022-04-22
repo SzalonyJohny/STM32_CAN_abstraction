@@ -1,4 +1,4 @@
-//Generated on Thu Apr  7 17:02:53 2022
+//Generated on Fri Apr 22 12:03:24 2022
 #ifndef TS
 #define TS
 
@@ -46,10 +46,10 @@ const uint16_t TS_REAR_SUSPENSION_CAN_ID = 0;
 const uint8_t TS_REAR_SUSPENSION_CAN_DLC = sizeof(TS_rear_suspension);
 const uint8_t TS_REAR_SUSPENSION_FREQUENCY = 50;
 
-const CAN_TxHeaderTypeDef can_tx_header_TS{
+const CAN_TxHeaderTypeDef can_tx_header_TS_MAIN{
 TS_MAIN_CAN_ID, 0xFFF, CAN_ID_STD, CAN_RTR_DATA, TS_MAIN_CAN_DLC, DISABLE};
 
-const CAN_TxHeaderTypeDef can_tx_header_TS{
+const CAN_TxHeaderTypeDef can_tx_header_TS_REAR_SUSPENSION{
 TS_REAR_SUSPENSION_CAN_ID, 0xFFF, CAN_ID_STD, CAN_RTR_DATA, TS_REAR_SUSPENSION_CAN_DLC, DISABLE};
 
 #endif

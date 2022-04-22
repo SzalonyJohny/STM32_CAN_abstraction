@@ -209,7 +209,7 @@ void OutputDocument::writeHalDefinitons()
 {
     for (auto const& frame: canFrames) {
         std::string upperCaseName = makeUppercase(frame.frameName);
-        file << "const CAN_TxHeaderTypeDef can_tx_header_" + deviceName + "{" << std::endl
+        file << "const CAN_TxHeaderTypeDef can_tx_header_" + upperCaseName + "{" << std::endl
              << upperCaseName + "_CAN_ID, 0xFFF, CAN_ID_STD, CAN_RTR_DATA, " + upperCaseName + "_CAN_DLC, DISABLE};" << std::endl;
 
         file << std::endl;

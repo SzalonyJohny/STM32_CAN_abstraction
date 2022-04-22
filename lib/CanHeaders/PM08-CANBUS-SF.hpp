@@ -1,4 +1,4 @@
-//Generated on Thu Apr  7 17:02:53 2022
+//Generated on Fri Apr 22 12:03:22 2022
 #ifndef SF
 #define SF
 
@@ -7,7 +7,7 @@
 #include "message_abstraction.hpp"
 
 typedef struct { 
-	uint16_t ok : 1;
+	uint16_t ok : 1; 
 	uint16_t overheat : 1; 
 	uint16_t undercurrent : 1; 
 	uint16_t overcurrent : 1; 
@@ -91,25 +91,25 @@ const uint16_t SF_DATA_FRAME_5_CAN_ID = 0;
 const uint8_t SF_DATA_FRAME_5_CAN_DLC = sizeof(SF_data_frame_5);
 const uint8_t SF_DATA_FRAME_5_FREQUENCY = 10;
 
-const CAN_TxHeaderTypeDef can_tx_header_SF{
+const CAN_TxHeaderTypeDef can_tx_header_SF_MAIN{
 SF_MAIN_CAN_ID, 0xFFF, CAN_ID_STD, CAN_RTR_DATA, SF_MAIN_CAN_DLC, DISABLE};
 
-const CAN_TxHeaderTypeDef can_tx_header_SF{
+const CAN_TxHeaderTypeDef can_tx_header_SF_DATA_FRAME_0{
 SF_DATA_FRAME_0_CAN_ID, 0xFFF, CAN_ID_STD, CAN_RTR_DATA, SF_DATA_FRAME_0_CAN_DLC, DISABLE};
 
-const CAN_TxHeaderTypeDef can_tx_header_SF{
+const CAN_TxHeaderTypeDef can_tx_header_SF_DATA_FRAME_1{
 SF_DATA_FRAME_1_CAN_ID, 0xFFF, CAN_ID_STD, CAN_RTR_DATA, SF_DATA_FRAME_1_CAN_DLC, DISABLE};
 
-const CAN_TxHeaderTypeDef can_tx_header_SF{
+const CAN_TxHeaderTypeDef can_tx_header_SF_DATA_FRAME_2{
 SF_DATA_FRAME_2_CAN_ID, 0xFFF, CAN_ID_STD, CAN_RTR_DATA, SF_DATA_FRAME_2_CAN_DLC, DISABLE};
 
-const CAN_TxHeaderTypeDef can_tx_header_SF{
+const CAN_TxHeaderTypeDef can_tx_header_SF_DATA_FRAME_3{
 SF_DATA_FRAME_3_CAN_ID, 0xFFF, CAN_ID_STD, CAN_RTR_DATA, SF_DATA_FRAME_3_CAN_DLC, DISABLE};
 
-const CAN_TxHeaderTypeDef can_tx_header_SF{
+const CAN_TxHeaderTypeDef can_tx_header_SF_DATA_FRAME_4{
 SF_DATA_FRAME_4_CAN_ID, 0xFFF, CAN_ID_STD, CAN_RTR_DATA, SF_DATA_FRAME_4_CAN_DLC, DISABLE};
 
-const CAN_TxHeaderTypeDef can_tx_header_SF{
+const CAN_TxHeaderTypeDef can_tx_header_SF_DATA_FRAME_5{
 SF_DATA_FRAME_5_CAN_ID, 0xFFF, CAN_ID_STD, CAN_RTR_DATA, SF_DATA_FRAME_5_CAN_DLC, DISABLE};
 
 #endif
